@@ -23,16 +23,16 @@ def fetch_data(ticker: str = "AAPL", period: str = None, start: str = None, end:
         if df.empty:
             raise ValueError("No data fetched. Check parameters again")
         
-        os.makedirs("data", exist_ok=True)
+        #os.makedirs("data", exist_ok=True)
 
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        #timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        file_path = f"data/{ticker}_{timestamp}_raw.csv"
+        #file_path = f"data/{ticker}_{timestamp}_raw.csv"
 
-        df.to_csv(file_path)
+        #df.to_csv(file_path)
 
-        print(f"data saved to {file_path}")
-        print(f"Data has {df.shape[0]} rows and {df.shape[1]} columns")
+        #print(f"data saved to {file_path}")
+        #print(f"Data has {df.shape[0]} rows and {df.shape[1]} columns")
 
         newDf = df.copy()
         newDf.columns = newDf.columns.droplevel(1)

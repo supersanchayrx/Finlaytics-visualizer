@@ -2,10 +2,12 @@ let stockChart = null;
 let allFinancialdata = [];
 let days = [];
 let currentDayIndex = 0;
+let globalDailyStats = {};
 
 const btn = document.getElementById('fetchbutton');
 
 btn.addEventListener('click', async () => {
+    const originalText = btn.textContent;
     btn.textContent = "Fetching Data ";
     btn.disabled = true;
 
@@ -13,8 +15,8 @@ btn.addEventListener('click', async () => {
 
     try {
         // uncomment this if using local server and put in correct port number instead of 5000 
-        // const response = await fetch('http://localhost:5000/fetch-data', {
-        const response = await fetch('https://finlaytics-visualizer.onrender.com/fetch-data', {
+        const response = await fetch('http://localhost:5000/fetch-data', {
+            //const response = await fetch('https://finlaytics-visualizer.onrender.com/fetch-data', {
             method: 'POST', headers:
             {
                 'Content-Type': 'application/json'
@@ -35,6 +37,8 @@ btn.addEventListener('click', async () => {
 
             currentDayIndex = days.length - 1;
 
+            globalDailyStats = data.dailyStats;
+
             RenderChartForCurrentDay();
         }
         else
@@ -45,7 +49,7 @@ btn.addEventListener('click', async () => {
     }
 
     finally {
-        btn.textContent = "Fetch stock data";
+        btn.textContent = originalText;
         btn.disabled = false;
     }
 }
@@ -53,6 +57,11 @@ btn.addEventListener('click', async () => {
 
 const nextbtn = document.getElementById('nextBtn');
 const prevbtn = document.getElementById('prevBtn');
+
+const currentPrice = document.getElementById('currentPrice');
+const dailyReturns = document.getElementById('DailyReturns');
+const volitality = document.getElementById('Volitality');
+
 
 nextbtn.addEventListener('click', nextDay);
 prevbtn.addEventListener('click', prevDay);
@@ -90,8 +99,7 @@ function RenderChartForCurrentDay() {
 
     let chartOption = document.getElementById('Charts').value;
 
-    switch(chartOption)
-    {
+    switch (chartOption) {
         case 'Candle':
             RenderCandleStick(ctx, stockName, targetDay, dayData);
             break;
@@ -106,19 +114,29 @@ function RenderChartForCurrentDay() {
             break;
     }
 
-    
+    if (globalDailyStats[targetDay]) {
+        updateKpi(globalDailyStats, targetDay);
+    }
 
     document.getElementById('prevBtn').disabled = (currentDayIndex === 0);
     document.getElementById('nextBtn').disabled = (currentDayIndex === days.length - 1);
 }
 
 function RenderCandleStick(ctx, stockName, targetDay, dayData) {
+    const candleData = dayData.map(item => ({
+        x: item.x,
+        o: item.o,
+        h: item.h,
+        l: item.l,
+        c: item.c
+    }));
+
     stockChart = new Chart(ctx, {
         type: 'candlestick',
         data: {
             datasets: [{
                 label: `${stockName} Hourly Chart - ${targetDay}`,
-                data: dayData
+                data: candleData
             }]
         },
         options: {
@@ -183,6 +201,7 @@ function RenderLineChart(ctx, stockName, targetDay, dayData) {
 function nextDay() {
     currentDayIndex++;
 
+    //updateKpi(data);
     RenderChartForCurrentDay();
 
 }
@@ -190,5 +209,13 @@ function nextDay() {
 function prevDay() {
     currentDayIndex--;
 
+    //updateKpi(data);
     RenderChartForCurrentDay();
+}
+
+function updateKpi(globalStatsObj, currentDay) {
+    let currentDayData = allFinancialdata.filter(item => item.dateLabel === currentDay);
+    currentPrice.innerText = currentDayData[currentDayData.length - 1].c.toFixed(2);
+    dailyReturns.innerText = (globalStatsObj[currentDay].returnPCT * 100).toFixed(2);
+    volitality.innerText = globalStatsObj[currentDay].volatility.toFixed(4);
 }
