@@ -2,9 +2,9 @@
 <html>
 
 <head>
-    <title>
-        Stock Fetcher
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Fetcher</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -14,7 +14,7 @@
     </div>
     <div class="container">
         <div class="label">
-            <label for="Stocks" style="margin-left: 40px;">Choose a stock:</label>
+            <label for="Stocks">Choose a stock:</label>
         </div>
         <div class="options">
             <select name="Stocks" id="Stocks">
@@ -34,16 +34,15 @@
             </select>
         </div>
 
-        <button type="button" id="fetchbutton" style="margin-left: 50px;">Visualize stock Data</button>
+        <button type="button" id="fetchbutton">Visualize stock Data</button>
     </div>
 
 
     <div class = "dashboard">
         <div class="chartCanvas">
-            <canvas id="financialchart" width="800" height="600">
-            </canvas>
+            <canvas id="financialchart"></canvas>
 
-            <div>
+            <div class="nav-buttons">
                 <button type="button" id="prevBtn">Previous Day</button>
                 <button type="button" id="nextBtn">Next Day</button>
             </div>

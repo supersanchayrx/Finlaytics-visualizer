@@ -1,33 +1,111 @@
-            .title
-            {
-                display: flex;
-                justify-content: center;
-            }
-            .container{
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: flex-start;
-                gap: 20px;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-                margin-top: 10px;
-                margin-left: 10px;
-            }
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    padding: 16px;
+}
 
-            .label{
-                /*display: flex;
-                justify-content: center; */
-            }
+.title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+}
 
-            .options{
-                /*display: flex;
-                justify-content: center;*/
-            }
-            .dashboard{
-                display: flex;
-                flex-direction:  row;
-                justify-content: center;
-                gap : 50px;
+.title h1 {
+    font-size: 1.5rem;
+    text-align: center;
+}
 
-                margin-top: 20px;
-            }
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.container select,
+.container button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.dashboard {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.chartCanvas {
+    flex: 1;
+    min-width: 0;
+    max-width: 800px;
+}
+
+.chartCanvas canvas {
+    width: 100% !important;
+    height: auto !important;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    justify-content: center;
+}
+
+.nav-buttons button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.KPIcards {
+    min-width: 180px;
+}
+
+.KPIcards p {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 12px;
+    }
+
+    .title h1 {
+        font-size: 1.15rem;
+    }
+
+    .container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .container select,
+    .container button {
+        width: 100%;
+    }
+
+    .dashboard {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .chartCanvas {
+        max-width: 100%;
+    }
+
+    .KPIcards {
+        min-width: unset;
+    }
+}

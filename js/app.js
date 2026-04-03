@@ -157,6 +157,8 @@ function RenderCandleStick(ctx, stockName, targetDay, dayData) {
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             scales: {
                 x: {
                     type: 'time',
@@ -183,6 +185,8 @@ function RenderAreaChart(ctx, stockName, targetDay, dayData) {
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             scales: {
                 x: {
                     type: 'time',
@@ -205,6 +209,8 @@ function RenderLineChart(ctx, stockName, targetDay, dayData) {
             }]
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: true,
             scales: {
                 x: {
                     type: 'time',
