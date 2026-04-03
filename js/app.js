@@ -3,6 +3,7 @@ let allFinancialdata = [];
 let days = [];
 let currentDayIndex = 0;
 let globalDailyStats = {};
+let dataReady = false;
 
 const btn = document.getElementById('fetchbutton');
 
@@ -33,11 +34,12 @@ btn.addEventListener('click', async () => {
             let daysCumm = new Set(allFinancialdata.map(item => item.dateLabel));
             //days = [... new Set(allFinancialdata.map(item => item.dateLabel))];
 
-            days = [...daysCumm]; // unique dates 
+            days = [...daysCumm];
 
             currentDayIndex = days.length - 1;
 
             globalDailyStats = data.dailyStats;
+            dataReady = true;
 
             RenderChartForCurrentDay();
         }
@@ -62,11 +64,19 @@ const currentPrice = document.getElementById('currentPrice');
 const dailyReturns = document.getElementById('DailyReturns');
 const volitality = document.getElementById('Volitality');
 
+nextbtn.disabled = true;
+prevbtn.disabled = true;
 
 nextbtn.addEventListener('click', nextDay);
 prevbtn.addEventListener('click', prevDay);
 
-document.getElementById('Charts').addEventListener('change',autoChangeChart);
+document.getElementById('Charts').addEventListener('change', autoChangeChart);
+
+document.getElementById('Stocks').addEventListener('change', () => {
+    dataReady = false;
+    nextbtn.disabled = true;
+    prevbtn.disabled = true;
+});
 
 function buildChartInfo(item) {
     let dayString = item.time.split(" ")[0];
@@ -83,6 +93,11 @@ function buildChartInfo(item) {
 }
 
 function RenderChartForCurrentDay() {
+    if (!dataReady || days.length === 0) return;
+
+    if (currentDayIndex < 0) currentDayIndex = 0;
+    if (currentDayIndex >= days.length) currentDayIndex = days.length - 1;
+
     const targetDay = days[currentDayIndex];
 
     const dayData = allFinancialdata.filter(item => item.dateLabel === targetDay);
@@ -116,12 +131,12 @@ function RenderChartForCurrentDay() {
             break;
     }
 
-    if (globalDailyStats[targetDay]) {
+    if (globalDailyStats && globalDailyStats[targetDay]) {
         updateKpi(globalDailyStats, targetDay);
     }
 
-    document.getElementById('prevBtn').disabled = (currentDayIndex === 0);
-    document.getElementById('nextBtn').disabled = (currentDayIndex === days.length - 1);
+    prevbtn.disabled = (currentDayIndex === 0);
+    nextbtn.disabled = (currentDayIndex === days.length - 1);
 }
 
 function RenderCandleStick(ctx, stockName, targetDay, dayData) {
@@ -201,17 +216,14 @@ function RenderLineChart(ctx, stockName, targetDay, dayData) {
 }
 
 function nextDay() {
+    if (!dataReady || currentDayIndex >= days.length - 1) return;
     currentDayIndex++;
-
-    //updateKpi(data);
     RenderChartForCurrentDay();
-
 }
 
 function prevDay() {
+    if (!dataReady || currentDayIndex <= 0) return;
     currentDayIndex--;
-
-    //updateKpi(data);
     RenderChartForCurrentDay();
 }
 
