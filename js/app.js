@@ -12,7 +12,9 @@ btn.addEventListener('click', async () => {
     const stock = document.getElementById('Stocks').value; //set the value of stock as per drop down
 
     try {
-        const response = await fetch('http://localhost:5000/fetch-data', {
+        // uncomment this if using local server and put in correct port number instead of 5000 
+        // const response = await fetch('http://localhost:5000/fetch-data', {
+        const response = await fetch('https://finlaytics-visualizer.onrender.com/fetch-data', {
             method: 'POST', headers:
             {
                 'Content-Type': 'application/json'
