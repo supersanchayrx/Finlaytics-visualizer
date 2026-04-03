@@ -66,7 +66,8 @@ function buildChartInfo(item) {
         o: item.open,
         h: item.high,
         l: item.low,
-        c: item.close
+        c: item.close,
+        y: item.close
     }
 }
 
@@ -87,6 +88,31 @@ function RenderChartForCurrentDay() {
 
     let stockName = document.getElementById('Stocks').value;
 
+    let chartOption = document.getElementById('Charts').value;
+
+    switch(chartOption)
+    {
+        case 'Candle':
+            RenderCandleStick(ctx, stockName, targetDay, dayData);
+            break;
+        case 'Area':
+            RenderAreaChart(ctx, stockName, targetDay, dayData);
+            break;
+        case 'Line':
+            RenderLineChart(ctx, stockName, targetDay, dayData);
+            break;
+        default:
+            RenderCandleStick(ctx, stockName, targetDay, dayData);
+            break;
+    }
+
+    
+
+    document.getElementById('prevBtn').disabled = (currentDayIndex === 0);
+    document.getElementById('nextBtn').disabled = (currentDayIndex === days.length - 1);
+}
+
+function RenderCandleStick(ctx, stockName, targetDay, dayData) {
     stockChart = new Chart(ctx, {
         type: 'candlestick',
         data: {
@@ -106,9 +132,52 @@ function RenderChartForCurrentDay() {
             }
         }
     });
+}
 
-    document.getElementById('prevBtn').disabled = (currentDayIndex === 0);
-    document.getElementById('nextBtn').disabled = (currentDayIndex === days.length - 1);
+function RenderAreaChart(ctx, stockName, targetDay, dayData) {
+    stockChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: `${stockName} Hourly Area Chart - ${targetDay}`,
+                data: dayData,
+                borderColor: 'rgb(75, 192, 192)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true,
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: { unit: 'hour' }
+                }
+            }
+        }
+    });
+}
+
+function RenderLineChart(ctx, stockName, targetDay, dayData) {
+    stockChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: `${stockName} Hourly Line Chart - ${targetDay}`,
+                data: dayData,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: { unit: 'hour' }
+                }
+            }
+        }
+    });
 }
 
 function nextDay() {

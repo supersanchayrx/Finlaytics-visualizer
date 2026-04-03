@@ -25,8 +25,19 @@
             </select>
         </div>
 
-        <button type="button" id="fetchbutton" style="margin-left: 50px;">Fetch Stock Data</button>
+
+        <div class="Chart Options">
+            <select name="ChartType" id="Charts">
+                <option value="Candle">CandleStick</option>
+                <option value="Area">Area</option>
+                <option value="Line">Line</option>
+            </select>
+        </div>
+
+        <button type="button" id="fetchbutton" style="margin-left: 50px;">Visualize stock Data</button>
     </div>
+
+
 
     <div class="chartCanvas">
         <canvas id="financialchart" width="800" height="500">
