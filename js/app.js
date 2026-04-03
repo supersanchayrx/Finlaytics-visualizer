@@ -66,6 +66,8 @@ const volitality = document.getElementById('Volitality');
 nextbtn.addEventListener('click', nextDay);
 prevbtn.addEventListener('click', prevDay);
 
+document.getElementById('Charts').addEventListener('change',autoChangeChart);
+
 function buildChartInfo(item) {
     let dayString = item.time.split(" ")[0];
 
@@ -218,4 +220,12 @@ function updateKpi(globalStatsObj, currentDay) {
     currentPrice.innerText = currentDayData[currentDayData.length - 1].c.toFixed(2);
     dailyReturns.innerText = (globalStatsObj[currentDay].returnPCT * 100).toFixed(2);
     volitality.innerText = globalStatsObj[currentDay].volatility.toFixed(4);
+}
+
+function autoChangeChart() {
+    if (stockChart === null)
+        return;
+
+    else
+        RenderChartForCurrentDay();
 }
